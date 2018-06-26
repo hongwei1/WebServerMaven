@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>MyWebService</groupId>
-    <artifactId>MyWebService</artifactId>
+    <groupId>MyWebServiceClient</groupId>
+    <artifactId>MyWebServiceClient</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>MyWebService</name>
 
     <dependencies>
         <dependency>
@@ -24,23 +23,18 @@
                     <executions>
                         <execution>
                             <goals>
-                                <goal>wsgen</goal>
+                                <goal>wsimport</goal>
                             </goals>
                         </execution>
                     </executions>
+                    <!-- -->
                     <configuration>
-                        <!-- Generation -->
-                        <sei>com.ubiteck.ws.server.MyServiceImpl</sei>
+                        <wsdlUrls>
+                            <wsdlUrl>http://localhost:8080/WS/MyService?wsdl</wsdlUrl>
+                        </wsdlUrls>
+                        <sourceDestDir>${project.build.directory}/generated</sourceDestDir>
+                        <verbose>true</verbose>
                     </configuration>
-                    <!-- if you want to use a specific version of JAX-WS, -->
-                    <!-- you can do so like this -->
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.sun.xml.ws</groupId>
-                            <artifactId>jaxws-tools</artifactId>
-                            <version>2.1.4</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -49,6 +43,25 @@
                         <source>1.6</source>
                         <target>1.6</target>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.5</version>
+                    <executions>
+                        <execution>
+                            <id>add-source</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>${project.build.directory}/generated</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
